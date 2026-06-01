@@ -5,31 +5,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
     <title>Editar Comanda #{{ comanda.id }}</title>
 </head>
 
 <body class="bg-light">
 
-    <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg bg-warning">
+
+    <nav class="navbar navbar-expand-lg navbar-espetinho">
         <div class="container-fluid">
             <div class="d-flex align-items-center gap-2">
                 <a href="/">
-                    <img src="/static/img/logo_espetinho.png" alt="Logo" width="40" height="40">
+                    <img src="/static/img/logo-espeto.png" alt="Logo" width="40" height="40">
                 </a>
                 <h1 class="fs-4 mb-0">
-                    <a href="/" class="text-decoration-none text-dark fw-bold">Flask Espetinho</a>
+                    <a href="/" class="text-decoration-none text-white fw-bold">Flask Espetinho</a>
                 </h1>
             </div>
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="btn btn-primary" href="/produtos">Produtos</a>
+                    <a class="btn btn-light" href="/produtos">Produtos</a>
                 </li>
             </ul>
         </div>
     </nav>
 
-    <!-- FLASH MESSAGES -->
     {% for categoria, mensagem in get_flashed_messages(with_categories=true) %}
         <div class="alert alert-{{ categoria }} alert-dismissible fade show mb-0">
             {{ mensagem }}
@@ -42,7 +42,6 @@
             <div class="card-body">
                 <h3 class="text-center mb-4">Editar Comanda #{{ comanda.id }}</h3>
 
-                <!-- Corrigido: bloqueia Paga E Inadimplente -->
                 {% if comanda.status == "Aberta" %}
                 <form action="{{ url_for('editar_comanda', id=comanda.id) }}" method="POST">
 

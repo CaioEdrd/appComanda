@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from datetime import datetime
 
-from database import init_db, db, migrate
+from database import db, migrate
 from models import Produto, Comanda, ItemComanda
 
 
@@ -11,13 +11,10 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///banco.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
-init_db(app)
+db.init_app(app)
 migrate.init_app(app,db)
 
 
-# ─────────────────────────────────────────────
-#  COMANDAS
-# ─────────────────────────────────────────────
 
 @app.route('/', methods=["GET", "POST"])
 def comandas():
@@ -36,13 +33,11 @@ def comandas():
             flash("É necessário colocar a mesa do cliente", "danger")
             return redirect(url_for("comandas"))
 
-        # Verifica mesa com comanda aberta
         mesa_ocupada = Comanda.query.filter_by(mesa=int(mesa), status="Aberta").first()
         if mesa_ocupada:
             flash("Mesa com comanda aberta!", "danger")
             return redirect(url_for("comandas"))
 
-        # Monta itens do pedido
         produtos = Produto.query.all()
         itens = []
         total = 0.0
@@ -73,7 +68,7 @@ def comandas():
             total=total,
         )
         db.session.add(comanda)
-        db.session.flush()   # garante comanda.id antes de associar itens
+        db.session.flush()
 
         for item in itens:
             item.comanda_id = comanda.id
@@ -83,7 +78,6 @@ def comandas():
         flash("Comanda aberta com sucesso!", "success")
         return redirect(url_for("comandas"))
 
-    # ── KPIs ──────────────────────────────────
     todas = Comanda.query.order_by(Comanda.id).all()
     produtos = Produto.query.all()
 
@@ -116,7 +110,7 @@ def comandas():
 def detalhe_comanda(id):
     comanda = Comanda.query.get_or_404(id)
 
-    # Calcula tempo da comanda
+
     fim = comanda.horarioPagamento if comanda.horarioPagamento else datetime.now()
     tempo_aberta = str(fim - comanda.horarioPedido).split(".")[0]
 
@@ -203,9 +197,6 @@ def apagar_comanda(id):
     return redirect(url_for('comandas'))
 
 
-# ─────────────────────────────────────────────
-#  ITENS DA COMANDA
-# ─────────────────────────────────────────────
 
 @app.route('/comanda/<int:comanda_id>/item/<int:item_id>/editar', methods=['GET', 'POST'])
 def editar_item(comanda_id, item_id):
@@ -236,10 +227,6 @@ def apagar_item(comanda_id, item_id):
     flash("Item apagado com sucesso!", "success")
     return redirect(url_for('detalhe_comanda', id=comanda_id))
 
-
-# ─────────────────────────────────────────────
-#  PRODUTOS
-# ─────────────────────────────────────────────
 
 @app.route('/produtos')
 def produto():
@@ -276,10 +263,20 @@ def atualizar_produto(id):
 @app.route('/produtos/<int:id>/apagar')
 def apagar_produto(id):
     produto = Produto.query.get_or_404(id)
+
+    if produto.itens:
+        flash(
+            "Não é possível excluir um produto que já foi utilizado em comandas.",
+            "danger"
+        )
+        return redirect(url_for('produto'))
+
     db.session.delete(produto)
     db.session.commit()
+
+    flash("Produto excluído com sucesso!", "success")
     return redirect(url_for('produto'))
 
 
 if __name__ == "__main__":
-    app.run(debug=True, use_reloader=False)
+    app.run(debug=True)

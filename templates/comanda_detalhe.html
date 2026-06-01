@@ -5,31 +5,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
     <title>Comanda #{{ comanda.id }}</title>
 </head>
 
 <body class="bg-light">
 
-    <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg bg-warning">
+    <nav class="navbar navbar-expand-lg navbar-espetinho">
         <div class="container-fluid">
             <div class="d-flex align-items-center gap-2">
                 <a href="/">
-                    <img src="/static/img/logo_espetinho.png" alt="Logo" width="40" height="40">
+                    <img src="/static/img/logo-espeto.png" alt="Logo" width="40" height="40">
                 </a>
                 <h1 class="fs-4 mb-0">
-                    <a href="/" class="text-decoration-none text-dark fw-bold">Flask Espetinho</a>
+                    <a href="/" class="text-decoration-none text-white fw-bold">Flask Espetinho</a>
                 </h1>
             </div>
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="btn btn-primary" href="/produtos">Produtos</a>
+                    <a class="btn btn-light" href="/produtos">Produtos</a>
                 </li>
             </ul>
         </div>
     </nav>
 
-    <!-- FLASH MESSAGES -->
+
     {% for categoria, mensagem in get_flashed_messages(with_categories=true) %}
         <div class="alert alert-{{ categoria }} alert-dismissible fade show mb-0">
             {{ mensagem }}
@@ -41,7 +41,6 @@
 
         <h3 class="fw-bold text-center mb-4">Comanda #{{ comanda.id }}</h3>
 
-        <!-- KPIs DA COMANDA -->
         <div class="row g-3 mb-4">
 
             <div class="col-6 col-md-3">
@@ -90,7 +89,6 @@
             <div class="col-6 col-md-3">
                 <div class="card h-100 text-center p-3">
                     <small class="text-muted text-uppercase fw-semibold">Qtd. de itens</small>
-                    <!-- Corrigido: comanda.pedido → comanda.itens -->
                     <span class="fs-3 fw-bold mt-1">{{ comanda.itens | sum(attribute='quantidade') }}</span>
                 </div>
             </div>
@@ -106,7 +104,6 @@
                 <div class="card h-100 text-center p-3">
                     <small class="text-muted text-uppercase fw-semibold">Encerramento</small>
                     <span class="fs-5 fw-bold mt-1">
-                        <!-- Corrigido: comparação com None em vez de "-" -->
                         {% if comanda.horarioPagamento is none %}
                             Em aberto
                         {% else %}
@@ -118,16 +115,14 @@
 
         </div>
 
-        <!-- OBSERVAÇÃO -->
         {% if comanda.observacao %}
         <div class="alert alert-secondary">
             <strong>Observação:</strong> {{ comanda.observacao }}
         </div>
         {% endif %}
 
-        <!-- TABELA DE ITENS -->
         <div class="card mb-4">
-            <div class="card-header bg-warning fw-semibold">
+            <div class="card-header header-espetinho fw-semibold text-center">
                 Itens do pedido
             </div>
             <div class="card-body p-0">
@@ -142,7 +137,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Corrigido: comanda.pedido → comanda.itens -->
                         {% for item in comanda.itens %}
                         <tr>
                             <td>{{ item.nome }}</td>
@@ -151,7 +145,6 @@
                             <td>R$ {{ "%.2f"|format(item.subtotal | float) }}</td>
                             <td>
                                 {% if comanda.status == "Aberta" %}
-                                    <!-- Corrigido: produto_id=item.produto_id → item_id=item.id -->
                                     <a href="{{ url_for('editar_item', comanda_id=comanda.id, item_id=item.id) }}"
                                        class="btn btn-warning btn-sm">Editar</a>
                                     <a href="{{ url_for('apagar_item', comanda_id=comanda.id, item_id=item.id) }}"
@@ -165,10 +158,9 @@
             </div>
         </div>
 
-        <!-- FORMULÁRIO DE ADIÇÃO DE ITENS -->
         {% if comanda.status == "Aberta" %}
         <div class="card mb-4">
-            <div class="card-header bg-warning fw-semibold">
+            <div class="card-header header-espetinho fw-semibold">
                 Adicionar itens
             </div>
             <div class="card-body">
