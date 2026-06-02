@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div class="container mt-4">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h3 class="text-center mb-4">Editar Produto</h3>
+
+                <form action="{{ url_for('atualizar_produto', id=produto.id) }}" method="POST">
+
+                    <div class="mb-3">
+                        <label class="form-label">Nome</label>
+                        <input type="text" name="nome" class="form-control"
+                               value="{{ produto.nome }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Preço</label>
+                        <input type="number" step="0.01" name="preco_venda" class="form-control"
+                               value="{{ produto.preco_venda }}" required>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-success w-100">Atualizar</button>
+                        <a href="{{ url_for('apagar_produto', id=produto.id) }}" class="btn btn-danger">Apagar</a>
+                        <a href="{{ url_for('produto') }}" class="btn btn-secondary">Cancelar</a>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+{%endblock%}

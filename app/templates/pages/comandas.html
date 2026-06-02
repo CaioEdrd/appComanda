@@ -1,40 +1,6 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../static/style.css">
-    <title>Comandas</title>
-</head>
-
-<body class="bg-light">
-
-    <nav class="navbar navbar-expand-lg navbar-espetinho">
-        <div class="container-fluid">
-            <div class="d-flex align-items-center gap-2">
-                <a href="/">
-                    <img src="/static/img/logo-espeto.png" alt="Logo" width="40" height="40">
-                </a>
-                <h1 class="fs-4 mb-0">
-                    <a href="/" class="text-decoration-none text-white fw-bold">Flask Espetinho</a>
-                </h1>
-            </div>
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="btn btn-light" href="/produtos">Produtos</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-
-    {% for categoria, mensagem in get_flashed_messages(with_categories=true) %}
-        <div class="alert alert-{{ categoria }} alert-dismissible fade show mb-0">
-            {{ mensagem }}
-            <button class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    {% endfor %}
+{% block content %}
 
     <div class="container mt-4">
 
@@ -103,65 +69,82 @@
                 Abrir Comanda — {{ dataHoje.strftime("%d/%m/%Y") }}
             </div>
             <div class="card-body">
-                <form method="post">
-
+                <form method="POST">
+                    {{ form.hidden_tag() }}
                     <div class="row g-3 mb-3">
                         <div class="col-md-6">
-                            <label class="form-label">Cliente</label>
-                            <input type="text" name="cliente" class="form-control"
-                                   placeholder="Nome do cliente" required>
+                            {{ form.cliente.label(class="form-label") }}
+                            {{ form.cliente(
+                                class="form-control",
+                                placeholder="Nome do cliente"
+                            ) }}
+
+                            {% for erro in form.cliente.errors %}
+                                <small class="text-danger d-block">
+                                    {{ erro }}
+                                </small>
+                            {% endfor %}
                         </div>
+
                         <div class="col-md-6">
-                            <label class="form-label">Mesa</label>
-                            <input type="number" name="mesa" class="form-control"
-                                   placeholder="Nº da mesa" required>
+                            {{ form.mesa.label(class="form-label") }}
+                            {{ form.mesa(
+                                class="form-control",
+                                placeholder="Nº da mesa"
+                            ) }}
+
+                            {% for erro in form.mesa.errors %}
+                                <small class="text-danger d-block">
+                                    {{ erro }}
+                                </small>
+                            {% endfor %}
                         </div>
+
                     </div>
 
                     {% if produtos|length == 0 %}
+
                         <div class="alert alert-warning text-center">
                             <h5>Nenhum produto cadastrado</h5>
-                            <p>Cadastre produtos antes de abrir uma comanda.</p>
-                            <a href="{{ url_for('produto') }}" class="btn btn-primary">Cadastrar produtos</a>
+
+                            <p>
+                                Cadastre produtos antes de abrir uma comanda.
+                            </p>
+
+                            <a href="{{ url_for('produto') }}"
+                            class="btn btn-primary">
+                                Cadastrar produtos
+                            </a>
                         </div>
+
                     {% else %}
-                        <label class="form-label">Pedido</label>
+
+                        <label class="form-label">
+                            Pedido
+                        </label>
+
                         <table class="table table-hover">
-                            <thead class="table-dark">
-                                <tr>
-                                    <th>#</th>
-                                    <th>Produto</th>
-                                    <th>Preço unit.</th>
-                                    <th>Quantidade</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for produto in produtos %}
-                                <tr>
-                                    <td>{{ produto.id }}</td>
-                                    <td>{{ produto.nome }}</td>
-                                    <td>R$ {{ "%.2f"|format(produto.preco_venda | float) }}</td>
-                                    <td>
-                                        <input type="number" min="0" value="0"
-                                               style="max-width: 90px;"
-                                               class="form-control form-control-sm"
-                                               name="quantidade_{{ produto.id }}">
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
+                            ...
                         </table>
 
                         <div class="mb-3">
-                            <label class="form-label">Observação</label>
-                            <textarea name="observacao" class="form-control" rows="2"></textarea>
+                            {{ form.observacao.label(class="form-label") }}
+
+                            {{ form.observacao(
+                                class="form-control",
+                                rows=2
+                            ) }}
+
+                            {% for erro in form.observacao.errors %}
+                                <small class="text-danger d-block">
+                                    {{ erro }}
+                                </small>
+                            {% endfor %}
                         </div>
 
-                        <div class="d-flex justify-content-end">
-                            <button type="submit" class="btn btn-success">Nova Comanda</button>
-                        </div>
+                        {{ form.submit(class="btn btn-success") }}
+
                     {% endif %}
-
                 </form>
             </div>
         </div>
@@ -218,11 +201,11 @@
                             <td class="text-center">R$ {{ "%.2f"|format(comanda.total) }}</td>
                             <td>{{ comanda.observacao }}</td>
                             <td class="text-center">
-                                <a href="{{ url_for('detalhe_comanda', id=comanda.id) }}"
+                                <a href="{{ url_for('comanda.detalhe_comanda', id=comanda.id) }}"
                                    class="btn btn-info btn-sm">Detalhar</a>
-                                <a href="{{ url_for('editar_comanda', id=comanda.id) }}"
+                                <a href="{{ url_for('comanda.editar_comanda', id=comanda.id) }}"
                                    class="btn btn-warning btn-sm">Editar</a>
-                                <a href="{{ url_for('apagar_comanda', id=comanda.id) }}"
+                                <a href="{{ url_for('comanda.apagar_comanda', id=comanda.id) }}"
                                    class="btn btn-danger btn-sm">Excluir</a>
                             </td>
                         </tr>
@@ -236,7 +219,4 @@
         </div>
 
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+{%endblock%}
