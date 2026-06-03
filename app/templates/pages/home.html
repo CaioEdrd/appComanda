@@ -70,80 +70,73 @@
             </div>
             <div class="card-body">
                 <form method="POST">
-                    {{ form.hidden_tag() }}
+                    {{ form_comanda.hidden_tag() }}
+
                     <div class="row g-3 mb-3">
                         <div class="col-md-6">
-                            {{ form.cliente.label(class="form-label") }}
-                            {{ form.cliente(
-                                class="form-control",
-                                placeholder="Nome do cliente"
-                            ) }}
-
-                            {% for erro in form.cliente.errors %}
-                                <small class="text-danger d-block">
-                                    {{ erro }}
-                                </small>
+                            {{ form_comanda.cliente.label(class="form-label") }}
+                            {{ form_comanda.cliente(class="form-control", placeholder="Nome do cliente") }}
+                            {% for erro in form_comanda.cliente.errors %}
+                                <small class="text-danger d-block">{{ erro }}</small>
                             {% endfor %}
                         </div>
 
                         <div class="col-md-6">
-                            {{ form.mesa.label(class="form-label") }}
-                            {{ form.mesa(
-                                class="form-control",
-                                placeholder="Nº da mesa"
-                            ) }}
-
-                            {% for erro in form.mesa.errors %}
-                                <small class="text-danger d-block">
-                                    {{ erro }}
-                                </small>
+                            {{ form_comanda.mesa.label(class="form-label") }}
+                            {{ form_comanda.mesa(class="form-control", placeholder="Nº da mesa") }}
+                            {% for erro in form_comanda.mesa.errors %}
+                                <small class="text-danger d-block">{{ erro }}</small>
                             {% endfor %}
                         </div>
-
                     </div>
 
                     {% if produtos|length == 0 %}
-
                         <div class="alert alert-warning text-center">
                             <h5>Nenhum produto cadastrado</h5>
-
-                            <p>
-                                Cadastre produtos antes de abrir uma comanda.
-                            </p>
-
-                            <a href="{{ url_for('produto') }}"
-                            class="btn btn-primary">
+                            <p>Cadastre produtos antes de abrir uma comanda.</p>
+                            <a href="{{ url_for('produto.produto') }}" class="btn btn-primary">
                                 Cadastrar produtos
                             </a>
                         </div>
-
                     {% else %}
-
-                        <label class="form-label">
-                            Pedido
-                        </label>
+                        <label class="form-label">Pedido</label>
 
                         <table class="table table-hover">
-                            ...
+                            <thead>
+                                <tr>
+                                    <th>Produto</th>
+                                    <th>Preço</th>
+                                    <th style="width: 120px">Quantidade</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in form_comanda.itens %}
+                                    {{ item.produto_id() }}
+                                    {{ item.nome() }}
+                                    {{ item.preco() }}
+                                    <tr>
+                                        <td>{{ item.nome.data }}</td>
+                                        <td>R$ {{ "%.2f"|format(item.preco.data | float) }}</td>
+                                        <td>
+                                            {{ item.quantidade(class="form-control", min="0") }}
+                                            {% for erro in item.quantidade.errors %}
+                                                <small class="text-danger">{{ erro }}</small>
+                                            {% endfor %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
                         </table>
 
                         <div class="mb-3">
-                            {{ form.observacao.label(class="form-label") }}
-
-                            {{ form.observacao(
-                                class="form-control",
-                                rows=2
-                            ) }}
-
-                            {% for erro in form.observacao.errors %}
-                                <small class="text-danger d-block">
-                                    {{ erro }}
-                                </small>
+                            {{ form_comanda.observacao.label(class="form-label") }}
+                            {{ form_comanda.observacao(class="form-control", rows=2) }}
+                            {% for erro in form_comanda.observacao.errors %}
+                                <small class="text-danger d-block">{{ erro }}</small>
                             {% endfor %}
                         </div>
 
-                        {{ form.submit(class="btn btn-success") }}
-
+                        {{ form_comanda.submit(class="btn btn-success") }}
                     {% endif %}
                 </form>
             </div>

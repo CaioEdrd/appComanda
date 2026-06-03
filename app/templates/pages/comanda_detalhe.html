@@ -107,12 +107,16 @@
                             <td>{{ item.quantidade }}</td>
                             <td>R$ {{ "%.2f"|format(item.valor_unitario | float) }}</td>
                             <td>R$ {{ "%.2f"|format(item.subtotal | float) }}</td>
-                            <td>
+                            <td class="d-flex gap-1">
                                 {% if comanda.status == "Aberta" %}
                                     <a href="{{ url_for('comanda.editar_item', comanda_id=comanda.id, item_id=item.id) }}"
-                                       class="btn btn-warning btn-sm">Editar</a>
-                                    <a href="{{ url_for('comanda.apagar_item', comanda_id=comanda.id, item_id=item.id) }}"
-                                       class="btn btn-danger btn-sm">Excluir</a>
+                                    class="btn btn-warning btn-sm">Editar</a>
+
+                                    <!-- ✅ POST em vez de <a href> -->
+                                    <form action="{{ url_for('comanda.apagar_item', comanda_id=comanda.id, item_id=item.id) }}" method="POST">
+                                        {{ form.hidden_tag() }}
+                                        <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
+                                    </form>
                                 {% endif %}
                             </td>
                         </tr>
@@ -128,36 +132,31 @@
                 Adicionar itens
             </div>
             <div class="card-body">
-                <form method="post">
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+
                     <table class="table table-hover align-middle">
                         <thead class="table-dark">
                             <tr>
-                                <th>#</th>
                                 <th>Produto</th>
                                 <th>Preço unit.</th>
-                                <th>Quantidade</th>
+                                <th style="width: 120px">Quantidade</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for produto in produtos %}
-                            <tr>
-                                <td>{{ produto.id }}</td>
-                                <td>{{ produto.nome }}</td>
-                                <td>R$ {{ "%.2f"|format(produto.preco_venda | float) }}</td>
-                                <td>
-                                    <input
-                                        type="number"
-                                        min="0"
-                                        value="0"
-                                        style="max-width: 90px;"
-                                        class="form-control form-control-sm"
-                                        name="quantidade_{{ produto.id }}"
-                                    >
-                                </td>
-                            </tr>
+                            {% for item in form.itens %}
+                                {{ item.produto_id() }}
+                                {{ item.nome() }}
+                                {{ item.preco() }}
+                                <tr>
+                                    <td>{{ item.nome.data }}</td>
+                                    <td>R$ {{ "%.2f"|format(item.preco.data | float) }}</td>
+                                    <td>{{ item.quantidade(class="form-control", min="0") }}</td>
+                                </tr>
                             {% endfor %}
                         </tbody>
                     </table>
+
                     <div class="d-flex justify-content-end">
                         <button type="submit" class="btn btn-success">Adicionar itens</button>
                     </div>

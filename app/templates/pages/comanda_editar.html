@@ -9,35 +9,29 @@
 
                 {% if comanda.status == "Aberta" %}
                 <form action="{{ url_for('comanda.editar_comanda', id=comanda.id) }}" method="POST">
+                    {{ form_comanda.hidden_tag() }}  <!-- ✅ CSRF -->
 
                     <div class="mb-3">
-                        <label class="form-label">Cliente</label>
-                        <input type="text" name="cliente" class="form-control"
-                               value="{{ comanda.cliente }}" required>
+                        {{ form_comanda.cliente.label(class="form-label") }}
+                        {{ form_comanda.cliente(class="form-control") }}
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Mesa</label>
-                        <input type="number" name="mesa" class="form-control"
-                               value="{{ comanda.mesa }}" required>
+                        {{ form_comanda.mesa.label(class="form-label") }}
+                        {{ form_comanda.mesa(class="form-control") }}
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Status</label>
-                        <select class="form-select" name="status">
-                            <option value="Aberta"       {{ 'selected' if comanda.status == 'Aberta' }}>Aberta</option>
-                            <option value="Paga"         {{ 'selected' if comanda.status == 'Paga' }}>Paga</option>
-                            <option value="Inadimplente" {{ 'selected' if comanda.status == 'Inadimplente' }}>Inadimplente</option>
-                        </select>
+                        {{ form_comanda.status.label(class="form-label") }}
+                        {{ form_comanda.status(class="form-select") }}
                     </div>
 
                     <div class="d-flex gap-2">
-                        <button type="submit" class="btn btn-success w-100">Atualizar</button>
+                        {{ form_comanda.submit(class="btn btn-success w-100") }}
                         <a href="{{ url_for('home.home') }}" class="btn btn-secondary w-100">Cancelar</a>
                     </div>
-
                 </form>
-
+      
                 {% else %}
                 <div class="alert alert-warning text-center">
                     Não é possível editar uma comanda com status <strong>{{ comanda.status }}</strong>.

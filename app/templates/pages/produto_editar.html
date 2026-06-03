@@ -7,24 +7,23 @@
             <div class="card-body">
                 <h3 class="text-center mb-4">Editar Produto</h3>
 
-                <form action="{{ url_for('atualizar_produto', id=produto.id) }}" method="POST">
+                <form method="POST">
+                    {{ form.hidden_tag() }}
 
                     <div class="mb-3">
-                        <label class="form-label">Nome</label>
-                        <input type="text" name="nome" class="form-control"
-                               value="{{ produto.nome }}" required>
+                        {{form.nome.label(class="form-label")}}                          
+                        {{ form.nome(class="form-control") }}
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Preço</label>
-                        <input type="number" step="0.01" name="preco_venda" class="form-control"
-                               value="{{ produto.preco_venda }}" required>
+                        {{form.preco_venda.label(class="form-label")}}                          
+                        {{ form.preco_venda(class="form-control") }}
                     </div>
 
                     <div class="d-flex gap-2">
                         <button type="submit" class="btn btn-success w-100">Atualizar</button>
-                        <a href="{{ url_for('apagar_produto', id=produto.id) }}" class="btn btn-danger">Apagar</a>
-                        <a href="{{ url_for('produto') }}" class="btn btn-secondary">Cancelar</a>
+                        <a href="{{ url_for('produto.apagar_produto', id=produto.id) }}" class="btn btn-danger">Apagar</a>
+                        <a href="{{ url_for('produto.produto') }}" class="btn btn-secondary">Cancelar</a>
                     </div>
 
                 </form>
