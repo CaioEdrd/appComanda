@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+   <!--Página editar item de uma comanda-->
 
     <div class="container mt-4">
         <div class="card shadow-sm">
@@ -8,20 +9,20 @@
                 <h3 class="text-center mb-4">Editar item — Comanda #{{ comanda.id }}</h3>
 
                 <form method="POST">
-                    {{ form.hidden_tag() }}  <!-- ✅ CSRF -->
+                    {{ form.hidden_tag() }}
 
                     <div class="mb-3">
                         <label class="form-label">Produto</label>
-                        <input type="text" class="form-control" value="{{ item.nome }}" disabled>
+                        <input type="text" class="form-control" value="{{ item.nome }}" disabled> <!--Preenche com o nome e não permite sua alteração-->
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Valor unitário</label>
                         <input type="text" class="form-control"
-                            value="R$ {{ '%.2f'|format(item.valor_unitario | float) }}" disabled>
-                    </div>
+                            value="R$ {{ '%.2f'|format(item.valor_unitario | float) }}" disabled> <!--Preenche com o valor e não permite sua alteração-->
+                    </div> 
 
-                    <div class="mb-3">
+                    <div class="mb-3"> <!--Permite a edição apenas da quantidade-->
                         {{ form.quantidade.label(class="form-label") }}
                         {{ form.quantidade(class="form-control", min="1") }}
                     </div>
@@ -33,10 +34,10 @@
                     </div>
 
                     <div class="d-flex gap-2">
+                        <!--Ações-->
                         <button type="submit" class="btn btn-success">Atualizar item</button>
                         <a href="{{ url_for('comanda.detalhe_comanda', id=comanda.id) }}" class="btn btn-secondary">Voltar</a>
 
-                        <!-- ✅ POST em vez de <a href> -->
                         <form action="{{ url_for('comanda.apagar_item', comanda_id=comanda.id, item_id=item.id) }}" method="POST">
                             {{ form.hidden_tag() }}
                             <button type="submit" class="btn btn-danger">Apagar item</button>

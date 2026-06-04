@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+   <!--Página De visualização e cadastro de produtos-->
 
     <div class="container mt-4">
 
@@ -10,7 +11,7 @@
 
                 <form action="{{ url_for('produto.cadastrar_produto') }}" method="POST">
                     {{ form.hidden_tag() }}
-
+                    <!--Formulário de cadastro de produtos com nome e preço de venda-->
                     <div class="mb-3">
                         {{ form.nome.label }}
                         {{ form.nome(class="form-select mb-2") }}
@@ -36,11 +37,11 @@
                 </tr>
             </thead>
             <tbody>
-                {% for produto in produtos %}
+                {% for produto in produtos %} <!--Passa em todos os produtos já cadastrados-->
                 <tr>
                     <td>{{ produto.id }}</td>
                     <td>{{ produto.nome }}</td>
-                    <td>R$ {{ "%.2f"|format(produto.preco_venda | float) }}</td>
+                    <td>R$ {{ "%.2f"|format(produto.preco_venda | float) }}</td> <!--formatação do preço-->
                     <td>
                         <a href="{{ url_for('produto.editar_produto', id=produto.id) }}"
                            class="btn btn-warning btn-sm">Editar</a>

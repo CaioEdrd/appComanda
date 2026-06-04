@@ -1,4 +1,7 @@
-    {% for categoria, mensagem in get_flashed_messages(with_categories=true) %}
+   
+   <!--Flashs-->
+
+   {% for categoria, mensagem in get_flashed_messages(with_categories=true) %}
         <div class="alert alert-{{ categoria }} alert-dismissible fade show mb-0">
             {{ mensagem }}
             <button class="btn-close" data-bs-dismiss="alert"></button>

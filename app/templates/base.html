@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+   <!--Estrutura base para demais-->
 
 <head>
     <meta charset="UTF-8">
@@ -11,11 +12,11 @@
 </head>
 <body class="bg-light">
         
-    {% include "components/navbar.html" %}
+    {% include "components/navbar.html" %} <!--Inclusão da barra de navegação-->
     <br>
 
 <div class="container-fluid">
-    {% include "components/alerts.html" %}
+    {% include "components/alerts.html" %} <!--Inclusão dos flashs-->
 
     {% block content %}{% endblock %}
 </div>

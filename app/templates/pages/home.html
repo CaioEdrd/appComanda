@@ -1,29 +1,31 @@
 {% extends "base.html" %}
 
 {% block content %}
+   <!--Página home-->
 
     <div class="container mt-4">
 
         <div class="row g-3 mb-4">
-
+            <!--KPI's-->
             <div class="col-6 col-md-3">
                 <div class="card h-100 text-center p-3 shadow-sm">
                     <small class="text-muted text-uppercase fw-semibold">Abertas</small>
-                    <span class="fs-3 fw-bold text-success mt-1">{{ total_abertas }}</span>
+                    <span class="fs-3 fw-bold text-success mt-1">{{ total_abertas }}</span>   <!--Comandas Abertas-->
+
                 </div>
             </div>
 
             <div class="col-6 col-md-3">
                 <div class="card h-100 text-center p-3 shadow-sm">
                     <small class="text-muted text-uppercase fw-semibold">Pagas</small>
-                    <span class="fs-3 fw-bold text-primary mt-1">{{ total_pagas }}</span>
+                    <span class="fs-3 fw-bold text-primary mt-1">{{ total_pagas }}</span> <!--Comanda pagas-->
                 </div>
             </div>
 
             <div class="col-6 col-md-3">
                 <div class="card h-100 text-center p-3 shadow-sm">
                     <small class="text-muted text-uppercase fw-semibold">Inadimplentes</small>
-                    <span class="fs-3 fw-bold text-danger mt-1">{{ total_inadimplentes }}</span>
+                    <span class="fs-3 fw-bold text-danger mt-1">{{ total_inadimplentes }}</span>   <!--Comandas Inadimplentes-->
                 </div>
             </div>
 
@@ -31,7 +33,7 @@
                 <div class="card h-100 text-center p-3 shadow-sm">
                     <small class="text-muted text-uppercase fw-semibold">Faturamento do dia</small>
                     {% if total_comandas %}
-                        <span class="fs-4 fw-bold text-success mt-1">R$ {{ "%.2f"|format(faturamento) }}</span>
+                        <span class="fs-4 fw-bold text-success mt-1">R$ {{ "%.2f"|format(faturamento) }}</span>   <!--Se houver comandas-->
                     {% else %}
                         <span class="fs-6 text-muted mt-1">Sem comandas</span>
                     {% endif %}
@@ -41,8 +43,8 @@
             <div class="col-12">
                 <div class="card p-3">
                     <small class="text-muted text-uppercase fw-semibold mb-2">Últimos pedidos</small>
-                    {% if ultimosCinco %}
-                        {% for pedido in ultimosCinco %}
+                    {% if ultimosCinco %} <!--Se houver comandas na lista dos últimos cinco pedidos-->
+                        {% for pedido in ultimosCinco %} <!--Passa em cada comanda da lista mostra as informações : -->
                             <p class="mb-1">
                                 Pedido #{{ pedido.id }} —
                                 {{ pedido.cliente }} —
@@ -66,15 +68,15 @@
 
         <div class="card mb-4">
             <div class="card-header header-espetinho fw-semibold text-center">
-                Abrir Comanda — {{ dataHoje.strftime("%d/%m/%Y") }}
+                Abrir Comanda — {{ dataHoje.strftime("%d/%m/%Y") }} <!--Abrir uma comanda na própria página-->
             </div>
             <div class="card-body">
                 <form method="POST">
                     {{ form_comanda.hidden_tag() }}
-
+                    <!--Formulário de criação da comanda-->
                     <div class="row g-3 mb-3">
                         <div class="col-md-6">
-                            {{ form_comanda.cliente.label(class="form-label") }}
+                            {{ form_comanda.cliente.label(class="form-label") }} 
                             {{ form_comanda.cliente(class="form-control", placeholder="Nome do cliente") }}
                             {% for erro in form_comanda.cliente.errors %}
                                 <small class="text-danger d-block">{{ erro }}</small>
@@ -90,15 +92,15 @@
                         </div>
                     </div>
 
-                    {% if produtos|length == 0 %}
+                    {% if produtos|length == 0 %} <!--Verifica a lista de produtos-->
                         <div class="alert alert-warning text-center">
                             <h5>Nenhum produto cadastrado</h5>
                             <p>Cadastre produtos antes de abrir uma comanda.</p>
                             <a href="{{ url_for('produto.produto') }}" class="btn btn-primary">
-                                Cadastrar produtos
+                                Cadastrar produtos <!--Sem produtos, dá a opção de cadastrar produtos-->
                             </a>
                         </div>
-                    {% else %}
+                    {% else %} <!--Se houver produtos:-->
                         <label class="form-label">Pedido</label>
 
                         <table class="table table-hover">
@@ -110,14 +112,16 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for item in form_comanda.itens %}
+                                {% for item in form_comanda.itens %} <!--Passa em todos os itens que podem ser adicionados-->
                                     {{ item.produto_id() }}
                                     {{ item.nome() }}
                                     {{ item.preco() }}
                                     <tr>
+                                       <!--informações dos itens-->
                                         <td>{{ item.nome.data }}</td>
                                         <td>R$ {{ "%.2f"|format(item.preco.data | float) }}</td>
                                         <td>
+                                            <!--seleção das quantidades dos itens-->
                                             {{ item.quantidade(class="form-control", min="0") }}
                                             {% for erro in item.quantidade.errors %}
                                                 <small class="text-danger">{{ erro }}</small>
@@ -127,7 +131,7 @@
                                 {% endfor %}
                             </tbody>
                         </table>
-
+                        <!--Campo de observação-->
                         <div class="mb-3">
                             {{ form_comanda.observacao.label(class="form-label") }}
                             {{ form_comanda.observacao(class="form-control", rows=2) }}
@@ -142,12 +146,13 @@
             </div>
         </div>
 
+        <!--Lista de comandas-->
         <div class="card shadow-sm mb-4">
             <div class="card-header header-espetinho fw-semibold text-center">
                 Comandas — {{ dataHoje.strftime("%d/%m/%Y") }}
             </div>
             <div class="card-body p-0">
-                {% if total_comandas %}
+                {% if total_comandas %} <!--Se houver comandas-->
                 <table class="table table-hover align-middle mb-0">
                     <thead class="table-dark">
                         <tr>
@@ -164,20 +169,21 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for comanda in listaComandas %}
+                        {% for comanda in listaComandas %} <!--Passa em todas as comandas da lista de comandas-->
                         <tr>
                             <td class="text-center">#{{ comanda.id }}</td>
                             <td>{{ comanda.cliente }}</td>
                             <td class="text-center">{{ comanda.mesa }}</td>
                             <td class="text-center">{{ comanda.horarioPedido.strftime("%H:%M") }}</td>
                             <td class="text-center">
-                                {% if comanda.horarioPagamento is not none %}
+                                {% if comanda.horarioPagamento is not none %} <!--Se o horario de pagamento não for none ele aparece-->
                                     {{ comanda.horarioPagamento.strftime("%H:%M") }}
-                                {% else %}
+                                {% else %} <!--Se for none, ele apresenta apenas "-" -->
                                     —
                                 {% endif %}
                             </td>
                             <td class="text-center">
+                                <!--Estilização conforme status-->
                                 {% if comanda.status == "Aberta" %}
                                     <span class="badge bg-success">Aberta</span>
                                 {% elif comanda.status == "Paga" %}
@@ -187,13 +193,14 @@
                                 {% endif %}
                             </td>
                             <td>
-                                {% for item in comanda.itens %}
+                                {% for item in comanda.itens %} <!--Passa em todos os itens daquela comanda e apresenta o nome e quantidade-->
                                     {{ item.nome }} ({{ item.quantidade }})<br>
                                 {% endfor %}
                             </td>
                             <td class="text-center">R$ {{ "%.2f"|format(comanda.total) }}</td>
                             <td>{{ comanda.observacao }}</td>
                             <td class="text-center">
+                                <!--Opções de ações com a comanda-->
                                 <a href="{{ url_for('comanda.detalhe_comanda', id=comanda.id) }}"
                                    class="btn btn-info btn-sm">Detalhar</a>
                                 <a href="{{ url_for('comanda.editar_comanda', id=comanda.id) }}"

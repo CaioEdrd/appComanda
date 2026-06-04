@@ -1,23 +1,25 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+   <!--Página de detalhe da comanda selecionada-->
     <div class="container mt-4">
 
-        <h3 class="fw-bold text-center mb-4">Comanda #{{ comanda.id }}</h3>
+        <h3 class="fw-bold text-center mb-4">Comanda #{{ comanda.id }}</h3> <!--Puxa o número da comanda selecionada-->
 
         <div class="row g-3 mb-4">
 
             <div class="col-6 col-md-3">
                 <div class="card h-100 text-center p-3">
                     <small class="text-muted text-uppercase fw-semibold">Cliente</small>
-                    <span class="fs-5 fw-bold mt-1">{{ comanda.cliente }}</span>
+                    <span class="fs-5 fw-bold mt-1">{{ comanda.cliente }}</span> <!--Puxa o cliente da comanda selecionada-->
                 </div>
             </div>
 
             <div class="col-6 col-md-3">
                 <div class="card h-100 text-center p-3">
                     <small class="text-muted text-uppercase fw-semibold">Mesa</small>
-                    <span class="fs-3 fw-bold mt-1">{{ comanda.mesa }}</span>
+                    <span class="fs-3 fw-bold mt-1">{{ comanda.mesa }}</span> <!--Puxa a mesa da comanda selecionada-->
                 </div>
             </div>
 
@@ -25,11 +27,12 @@
                 <div class="card h-100 text-center p-3">
                     <small class="text-muted text-uppercase fw-semibold">Status</small>
                     <div class="mt-1">
-                        {% if comanda.status == "Aberta" %}
+                        <!--Personalização conforme status-->
+                        {% if comanda.status == "Aberta" %} <!--verifica se a comanda está aberta-->
                             <span class="badge bg-success fs-6">{{ comanda.status }}</span>
-                        {% elif comanda.status == "Paga" %}
+                        {% elif comanda.status == "Paga" %} <!--verifica se a comanda está aberta-->
                             <span class="badge bg-primary fs-6">{{ comanda.status }}</span>
-                        {% else %}
+                        {% else %} <!--verifica se a comanda está inadimplente-->
                             <span class="badge bg-danger fs-6">{{ comanda.status }}</span>
                         {% endif %}
                     </div>
@@ -39,28 +42,28 @@
             <div class="col-6 col-md-3">
                 <div class="card h-100 text-center p-3">
                     <small class="text-muted text-uppercase fw-semibold">Tempo aberto</small>
-                    <span class="fs-5 fw-bold mt-1">{{ tempo_aberta }}</span>
+                    <span class="fs-5 fw-bold mt-1">{{ tempo_aberta }}</span> <!--tempo que a comanda está aberta-->
                 </div>
             </div>
 
             <div class="col-6 col-md-3">
                 <div class="card h-100 text-center p-3">
                     <small class="text-muted text-uppercase fw-semibold">Total</small>
-                    <span class="fs-3 fw-bold text-success mt-1">R$ {{ "%.2f"|format(comanda.total) }}</span>
+                    <span class="fs-3 fw-bold text-success mt-1">R$ {{ "%.2f"|format(comanda.total) }}</span> <!--Valor total da comanda formatada-->
                 </div>
             </div>
 
             <div class="col-6 col-md-3">
                 <div class="card h-100 text-center p-3">
                     <small class="text-muted text-uppercase fw-semibold">Qtd. de itens</small>
-                    <span class="fs-3 fw-bold mt-1">{{ comanda.itens | sum(attribute='quantidade') }}</span>
+                    <span class="fs-3 fw-bold mt-1">{{ comanda.itens | sum(attribute='quantidade') }}</span> <!--Soma das quantidades de itens-->
                 </div>
             </div>
 
             <div class="col-6 col-md-3">
                 <div class="card h-100 text-center p-3">
                     <small class="text-muted text-uppercase fw-semibold">Abertura</small>
-                    <span class="fs-5 fw-bold mt-1">{{ comanda.horarioPedido.strftime("%d/%m %H:%M") }}</span>
+                    <span class="fs-5 fw-bold mt-1">{{ comanda.horarioPedido.strftime("%d/%m %H:%M") }}</span> <!--horário de abertura formatado-->
                 </div>
             </div>
 
@@ -68,10 +71,10 @@
                 <div class="card h-100 text-center p-3">
                     <small class="text-muted text-uppercase fw-semibold">Encerramento</small>
                     <span class="fs-5 fw-bold mt-1">
-                        {% if comanda.horarioPagamento is none %}
+                        {% if comanda.horarioPagamento is none %} <!--Se não tiver fechada, o horário de fechamento ficará como "em aberto"-->
                             Em aberto
                         {% else %}
-                            {{ comanda.horarioPagamento.strftime("%d/%m %H:%M") }}
+                            {{ comanda.horarioPagamento.strftime("%d/%m %H:%M") }} <!--horário de fechamento -->
                         {% endif %}
                     </span>
                 </div>
@@ -79,7 +82,7 @@
 
         </div>
 
-        {% if comanda.observacao %}
+        {% if comanda.observacao %} <!--Verifica se há observação-->
         <div class="alert alert-secondary">
             <strong>Observação:</strong> {{ comanda.observacao }}
         </div>
@@ -101,18 +104,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for item in comanda.itens %}
+                        {% for item in comanda.itens %} <!--passa em todos os itens da comanda-->
                         <tr>
                             <td>{{ item.nome }}</td>
                             <td>{{ item.quantidade }}</td>
                             <td>R$ {{ "%.2f"|format(item.valor_unitario | float) }}</td>
                             <td>R$ {{ "%.2f"|format(item.subtotal | float) }}</td>
                             <td class="d-flex gap-1">
-                                {% if comanda.status == "Aberta" %}
+                                {% if comanda.status == "Aberta" %} <!--Se a comanda está aberta permite:-->
                                     <a href="{{ url_for('comanda.editar_item', comanda_id=comanda.id, item_id=item.id) }}"
-                                    class="btn btn-warning btn-sm">Editar</a>
-
-                                    <!-- ✅ POST em vez de <a href> -->
+                                    class="btn btn-warning btn-sm">Editar</a> 
                                     <form action="{{ url_for('comanda.apagar_item', comanda_id=comanda.id, item_id=item.id) }}" method="POST">
                                         {{ form.hidden_tag() }}
                                         <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
@@ -126,15 +127,14 @@
             </div>
         </div>
 
-        {% if comanda.status == "Aberta" %}
+        {% if comanda.status == "Aberta" %} <!--Verifica se a comanda está aberta-->
         <div class="card mb-4">
             <div class="card-header header-espetinho fw-semibold">
                 Adicionar itens
             </div>
             <div class="card-body">
                 <form method="POST">
-                    {{ form.hidden_tag() }}
-
+                    {{ form.hidden_tag() }} 
                     <table class="table table-hover align-middle">
                         <thead class="table-dark">
                             <tr>
@@ -144,14 +144,14 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for item in form.itens %}
-                                {{ item.produto_id() }}
-                                {{ item.nome() }}
-                                {{ item.preco() }}
+                            {% for item in form.itens %} <!--Formulário de adição de itens-->
+                                {{ item.produto_id() }} <!--ID do item-->
+                                {{ item.nome() }}<!--nome do item-->
+                                {{ item.preco() }}<!--preço do item-->
                                 <tr>
-                                    <td>{{ item.nome.data }}</td>
-                                    <td>R$ {{ "%.2f"|format(item.preco.data | float) }}</td>
-                                    <td>{{ item.quantidade(class="form-control", min="0") }}</td>
+                                    <td>{{ item.nome.data }}</td> <!--preenche o nome do item-->
+                                    <td>R$ {{ "%.2f"|format(item.preco.data | float) }}</td> <!--formatação do preço-->
+                                    <td>{{ item.quantidade(class="form-control", min="0") }}</td> <!--quantidade do item-->
                                 </tr>
                             {% endfor %}
                         </tbody>
@@ -163,7 +163,7 @@
                 </form>
             </div>
         </div>
-        {% else %}
+        {% else %} <!--Se a comanda não está aberta, ele não permite adicionar itens-->
         <div class="alert alert-warning">
             Não é possível adicionar itens em uma comanda <strong>{{ comanda.status.lower() }}</strong>.
         </div>

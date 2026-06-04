@@ -1,18 +1,20 @@
 {% extends "base.html" %}
 
 {% block content %}
+   <!--Página de edição da comanda selecionada-->
 
     <div class="container mt-4">
         <div class="card shadow-sm">
             <div class="card-body">
                 <h3 class="text-center mb-4">Editar Comanda #{{ comanda.id }}</h3>
 
-                {% if comanda.status == "Aberta" %}
+                {% if comanda.status == "Aberta" %} <!--Verifica se a comanda está aberta-->
                 <form action="{{ url_for('comanda.editar_comanda', id=comanda.id) }}" method="POST">
-                    {{ form_comanda.hidden_tag() }}  <!-- ✅ CSRF -->
+                    {{ form_comanda.hidden_tag() }}  <!-- Segurança do forms -->
 
+                    <!--Estilização do formulário para editar a comanda-->
                     <div class="mb-3">
-                        {{ form_comanda.cliente.label(class="form-label") }}
+                        {{ form_comanda.cliente.label(class="form-label") }} 
                         {{ form_comanda.cliente(class="form-control") }}
                     </div>
 
@@ -33,26 +35,9 @@
                 </form>
       
                 {% else %}
-                <div class="alert alert-warning text-center">
+                <div class="alert alert-warning text-center"> <!--Se a comanda não estiver aberta, não permite edição-->
                     Não é possível editar uma comanda com status <strong>{{ comanda.status }}</strong>.
                 </div>
-
-                <div class="card p-3 mb-3">
-                    <p class="mb-1"><strong>Cliente:</strong> {{ comanda.cliente }}</p>
-                    <p class="mb-1"><strong>Mesa:</strong> {{ comanda.mesa }}</p>
-                    <p class="mb-1">
-                        <strong>Status:</strong>
-                        {% if comanda.status == "Paga" %}
-                            <span class="badge bg-primary">Paga</span>
-                        {% else %}
-                            <span class="badge bg-danger">Inadimplente</span>
-                        {% endif %}
-                    </p>
-                    <p class="mb-1"><strong>Abertura:</strong> {{ comanda.horarioPedido.strftime("%d/%m/%Y %H:%M") }}</p>
-                    <p class="mb-0"><strong>Encerramento:</strong> {{ comanda.horarioPagamento.strftime("%d/%m/%Y %H:%M") }}</p>
-                </div>
-
-                <a href="{{ url_for('home.home') }}" class="btn btn-secondary w-100">Voltar</a>
 
                 {% endif %}
 

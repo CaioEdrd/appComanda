@@ -9,6 +9,7 @@ class Produto(db.Model):
 
     # Um produto pode aparecer em vários itens de comanda
     itens = db.relationship('ItemComanda', backref='produto', lazy=True)
-
+    
+    #função auxiliar
     def __repr__(self):
         return f'<Produto {self.id} - {self.nome}>'

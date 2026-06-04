@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import IntegerField, SubmitField
 from wtforms.validators import DataRequired, NumberRange
 
-class ItemComandaForm(FlaskForm):
+class ItemComandaForm(FlaskForm): # formulário de item
     quantidade = IntegerField(
         "Quantidade",
         validators=[
