@@ -1,11 +1,13 @@
 from flask import Flask #importação do flask 
 from app.config import Config #importação das configurações
-from app.extensions import db, migrate #importação das extensões
+from app.extensions import db, migrate,login_manager #importação das extensões
 
 #importação das rotas 
 from app.controllers.home_controller import home_bp
 from app.controllers.comanda_controller import comanda_bp
 from app.controllers.produto_controller import produto_bp
+from app.controllers.login_controller import login_bp
+from app.controllers.cadastro_controller import cadastro_bp
 
 
 def create_app():
@@ -15,8 +17,12 @@ def create_app():
   
     db.init_app(app) #inicialização do banco com a aplicação
     migrate.init_app(app, db) #Inicializa o Flask-Migrate passando o app e o banco
+    login_manager.init_app(app)
 
+    login_manager.login_view = "login.login"
     #registro das blueprints/rotas
+    app.register_blueprint(login_bp, url_prefix="/login")
+    app.register_blueprint(cadastro_bp, url_prefix="/cadastro")
     app.register_blueprint(home_bp, url_prefix="/")
     app.register_blueprint(comanda_bp, url_prefix="/comanda")
     app.register_blueprint(produto_bp, url_prefix="/produtos")

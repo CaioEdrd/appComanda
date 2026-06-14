@@ -1,0 +1,58 @@
+{% extends "base_login.html" %}
+
+{% block content %}
+
+    <div class="container py-5 d-flex justify-content-center align-items-center">
+
+        <div class="row login-container">
+
+            <!-- Lado esquerdo -->
+            <div class="col-md-6 login-left d-flex flex-column justify-content-center align-items-center">
+
+                <img src="{{ url_for('static', filename='img/logo-tela-login.png') }}"
+                    alt="Logo">
+            </div>
+
+            <!-- Lado direito -->
+            <div class="col-md-5 login-right d-flex flex-column justify-content-center">
+
+                <h2 class="text-center mb-4 text-white">
+                    Entrar na conta
+                </h2>
+
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+
+                    <div class="mb-3">
+                        {{ form.email.label }}
+                        {{ form.email(class="form-control-user mb-2") }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.senha.label }}
+                        {{ form.senha(class="form-control-user mb-2") }}
+                    </div>
+
+
+                    <button type="submit" class="btn-login">
+                        Entrar
+                    </button>
+
+                </form>
+
+                <div class="text-center mt-4">
+                    <p class="mb-0 text-white">
+                        Não tem uma conta?
+                        <a href="{{ url_for('cadastro.cadastro') }}" class="nova-conta">
+                            Clique aqui para criar sua conta.
+                        </a>
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+  
+{%endblock%}

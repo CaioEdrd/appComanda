@@ -5,11 +5,14 @@ from app.models.item_comanda import ItemComanda
 from app.models.produto import Produto
 from app.forms.comanda_form import ComandaForm
 from datetime import datetime
+from flask_login import login_required
+
 
 home_bp = Blueprint("home", __name__) #bp da home
 
 
 @home_bp.route('/', methods=["GET", "POST"]) #rota home
+@login_required
 def home():
     produtos     = Produto.query.all() #select em todos os produtos
     form_comanda = ComandaForm() #intância o formulário da comanda

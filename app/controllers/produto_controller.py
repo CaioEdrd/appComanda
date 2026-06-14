@@ -1,12 +1,33 @@
-from flask import Blueprint, render_template, redirect, flash, url_for
+from flask import Blueprint, render_template, redirect, flash, url_for,abort
 from app.extensions import db
 from app.models.produto import Produto
 from app.forms.produto_form import ProdutoForm
+from flask_login import current_user,login_required
+from functools import wraps
+
+
 
 produto_bp = Blueprint("produto", __name__) #bp produto
 
+def perfil_required(perfil):
+
+    def decorator(func):
+
+        @wraps(func)
+        def decorated_view(*args, **kwargs):
+
+            if current_user.perfil != perfil:
+                abort(403)
+
+            return func(*args, **kwargs)
+
+        return decorated_view
+
+    return decorator
 
 @produto_bp.route('/') #rota principal de produtos
+@login_required
+@perfil_required("admin")
 def produto():
     produtos = Produto.query.all()
     form = ProdutoForm() #criação do formulário de produtos
@@ -33,6 +54,8 @@ def cadastrar_produto():
 
 
 @produto_bp.route('/<int:id>/editar', methods=['GET', 'POST'])  #rota de editar produto
+@login_required
+@perfil_required("admin")
 def editar_produto(id):
     produto = Produto.query.get_or_404(id) #select no produto específico
     form = ProdutoForm(obj=produto) #preenche o formulário com os dados do item
@@ -48,6 +71,8 @@ def editar_produto(id):
 
 
 @produto_bp.route('/<int:id>/apagar', methods=['GET','POST'])  #rota de apagar produto
+@login_required
+@perfil_required("admin")
 def apagar_produto(id):
     produto = Produto.query.get_or_404(id)
 

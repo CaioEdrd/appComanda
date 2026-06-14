@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, flash, url_for, request #importação de módulos da biblioteca "flask"
+from flask import Blueprint, render_template, redirect, flash, url_for, request, abort #importação de módulos da biblioteca "flask"
 from app.extensions import db #importação do banco
 from app.models.comanda import Comanda #importação da tabela comanda
 from app.models.item_comanda import ItemComanda #importação da tabela de itens
@@ -6,11 +6,30 @@ from app.models.produto import Produto #importação da tabela produto
 from app.forms.item_editar_form import ItemComandaForm #importação do formulário de editar item da comanda
 from app.forms.comanda_form import  AdicionarItensForm, EditarComandaForm #importação de formulários da comanda e de adicionar itens na comanda
 from datetime import datetime #importação da biblioteca datetime
+from flask_login import current_user,login_required
+from functools import wraps
 
 comanda_bp = Blueprint("comanda", __name__) #configuração da blueprint da comanda
 
+def perfil_required(perfil):
+
+    def decorator(func):
+
+        @wraps(func)
+        def decorated_view(*args, **kwargs):
+
+            if current_user.perfil != perfil:
+                abort(403)
+
+            return func(*args, **kwargs)
+
+        return decorated_view
+
+    return decorator
 
 @comanda_bp.route('/<int:id>', methods=["GET", "POST"]) #rota de detalhar uma comanda específica
+@login_required
+@perfil_required("garçom")
 def detalhe_comanda(id):
     comanda  = Comanda.query.get_or_404(id) #select na comadna
     produtos = Produto.query.all() #select nos produtos
@@ -77,6 +96,8 @@ def detalhe_comanda(id):
 
 
 @comanda_bp.route('/<int:id>/editar', methods=["GET", "POST"]) #rota de editar uma comanda específica
+@login_required
+@perfil_required("garçom")
 def editar_comanda(id):
     comanda      = Comanda.query.get_or_404(id)
     form_comanda = EditarComandaForm(obj=comanda) #preenche o formulario da comanda com as informações da comanda que foi puxada da tabela pelo select anterior
@@ -110,6 +131,8 @@ def apagar_comanda(id):
 
 
 @comanda_bp.route('/<int:comanda_id>/item/<int:item_id>/editar', methods=["GET", "POST"]) #rota de edição de item na comanda
+@login_required
+@perfil_required("garçom")
 def editar_item(comanda_id, item_id):
     comanda  = Comanda.query.get_or_404(comanda_id) #select na comanda
     item     = ItemComanda.query.get_or_404(item_id) #select nos itens daquela comanda
@@ -127,6 +150,8 @@ def editar_item(comanda_id, item_id):
 
 
 @comanda_bp.route('/<int:comanda_id>/item/<int:item_id>/apagar', methods=["POST", "GET"])  # rota de apagar item
+@login_required
+@perfil_required("garçom")
 def apagar_item(comanda_id, item_id):
     comanda = Comanda.query.get_or_404(comanda_id)
     item    = ItemComanda.query.get_or_404(item_id)

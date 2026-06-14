@@ -1,0 +1,55 @@
+{% extends "base_login.html" %}
+
+{% block content %}
+
+
+    <div class="container-form py-5 d-flex justify-content-center align-items-center">
+
+        <div class="col-md-5 d-flex flex-column justify-content-center">
+                <h2 class="text-center mb-4 text-white">
+                    Criar cadastro
+                </h2>
+
+            <form method="POST" action="{{ url_for('cadastro.cadastro') }}">
+                    {{ form.hidden_tag() }}
+
+                    <div class="mb-3">
+                        {{ form.nome.label }}
+                        <br>
+                        {{ form.nome(class="form-control-user mb-2") }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.email.label }}
+                        <br>
+                        {{ form.email(class="form-control-user mb-2") }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.senha.label }}
+                        <br>
+                        {{ form.senha(class="form-control-user mb-2") }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.confirma_senha.label }}
+                        <br>
+
+                        {{ form.confirma_senha(class="form-control-user mb-2") }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.perfil.label }}
+                        <br>
+                        {{ form.perfil(class="form-select-user mb-2") }}
+                    </div>
+
+                    <button type="submit" class="btn-login">
+                        Criar conta
+                    </button>
+                    
+
+                </form>
+
+    </div>   
+{%endblock%}
