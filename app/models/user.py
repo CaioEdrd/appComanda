@@ -9,7 +9,8 @@ class User(db.Model, UserMixin):
 
     id = db.Column(
         db.Integer,
-        primary_key=True
+        primary_key=True,
+        autoincrement = True
     )
 
     nome = db.Column(
