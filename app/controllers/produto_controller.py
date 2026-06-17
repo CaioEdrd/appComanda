@@ -17,7 +17,8 @@ def perfil_required(perfil):
         def decorated_view(*args, **kwargs):
 
             if current_user.perfil != perfil:
-                abort(403)
+                flash("Você não tem permissão para acessar essa página.", "danger")
+                return redirect(url_for('home.home'))
 
             return func(*args, **kwargs)
 

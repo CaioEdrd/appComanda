@@ -11,15 +11,16 @@ from functools import wraps
 
 comanda_bp = Blueprint("comanda", __name__) #configuração da blueprint da comanda
 
-def perfil_required(perfil):
+def perfil_required(*perfil):
 
     def decorator(func):
 
         @wraps(func)
         def decorated_view(*args, **kwargs):
 
-            if current_user.perfil != perfil:
-                abort(403)
+            if current_user.perfil not in perfil:
+                flash("Você não tem permissão para acessar essa página.", "danger")
+                return redirect(url_for('home.home'))
 
             return func(*args, **kwargs)
 
@@ -29,7 +30,7 @@ def perfil_required(perfil):
 
 @comanda_bp.route('/<int:id>', methods=["GET", "POST"]) #rota de detalhar uma comanda específica
 @login_required
-@perfil_required("garçom")
+@perfil_required("garçom", "admin")
 def detalhe_comanda(id):
     comanda  = Comanda.query.get_or_404(id) #select na comadna
     produtos = Produto.query.all() #select nos produtos
@@ -113,7 +114,16 @@ def editar_comanda(id):
         if comanda.status in ("Paga", "Inadimplente"):
             if not comanda.horarioPagamento:
                 comanda.horarioPagamento = datetime.now() #se estiver fechada/inadimplente, é adicionado o horário de pagamento
+       
+        mesa_ocupada = Comanda.query.filter_by(
+            mesa=form_comanda.mesa.data,
+            status="Aberta"
+        ).filter(Comanda.id != id).first()  # ← exclui a própria comanda da busca
 
+        if mesa_ocupada:
+            flash("Mesa com comanda aberta!", "danger")
+            return redirect(url_for("home.home"))
+        
         db.session.commit()
         flash("Comanda editada com sucesso!", "success")
         return redirect(url_for('home.home'))
@@ -122,6 +132,8 @@ def editar_comanda(id):
 
 
 @comanda_bp.route('/<int:id>/apagar', methods=["POST", "GET"])  # rota de apagar uma comanda
+@login_required
+@perfil_required("admin")
 def apagar_comanda(id):
     comanda = Comanda.query.get_or_404(id) #select na comanda a ser apagada
     db.session.delete(comanda) #apaga da tabela

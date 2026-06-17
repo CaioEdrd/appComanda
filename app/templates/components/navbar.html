@@ -13,8 +13,13 @@
         </div>
         <ul class="navbar-nav">
             <li class="nav-item">
+                {% if current_user.is_authenticated %}
+                    <span class="navbar-user"> 👤 {{ current_user.email }}</span>
+                {% endif %}
                 <!--Botão para visualizar e adicionar produtos-->
+                {% if current_user.perfil == "admin" %}
                 <a class="btn btn-light" href="/produtos">Produtos</a>
+                {% endif %}
                 <a class="btn btn-light" href="/login/logout">Sair</a>
             </li>
         </ul>

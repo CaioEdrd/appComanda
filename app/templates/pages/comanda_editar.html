@@ -38,6 +38,7 @@
                 <div class="alert alert-warning text-center"> <!--Se a comanda não estiver aberta, não permite edição-->
                     Não é possível editar uma comanda com status <strong>{{ comanda.status }}</strong>.
                 </div>
+                    <a href="{{ url_for('home.home') }}" class="btn btn-secondary w-100">Cancelar</a>
 
                 {% endif %}
 

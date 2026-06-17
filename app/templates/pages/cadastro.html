@@ -3,7 +3,7 @@
 {% block content %}
 
 
-    <div class="container-form py-5 d-flex justify-content-center align-items-center">
+    <div class="container-form d-flex justify-content-center align-items-center">
 
         <div class="col-md-5 d-flex flex-column justify-content-center">
                 <h2 class="text-center mb-4 text-white">
@@ -14,32 +14,32 @@
                     {{ form.hidden_tag() }}
 
                     <div class="mb-3">
-                        {{ form.nome.label }}
+                        {{ form.nome.label(class="form-labels") }}
                         <br>
                         {{ form.nome(class="form-control-user mb-2") }}
                     </div>
 
                     <div class="mb-3">
-                        {{ form.email.label }}
+                        {{ form.email.label(class="form-labels") }}
                         <br>
                         {{ form.email(class="form-control-user mb-2") }}
                     </div>
 
                     <div class="mb-3">
-                        {{ form.senha.label }}
+                        {{ form.senha.label(class="form-labels") }}
                         <br>
                         {{ form.senha(class="form-control-user mb-2") }}
                     </div>
 
                     <div class="mb-3">
-                        {{ form.confirma_senha.label }}
+                        {{ form.confirma_senha.label(class="form-labels") }}
                         <br>
 
                         {{ form.confirma_senha(class="form-control-user mb-2") }}
                     </div>
 
                     <div class="mb-3">
-                        {{ form.perfil.label }}
+                        {{ form.perfil.label(class="form-labels") }}
                         <br>
                         {{ form.perfil(class="form-select-user mb-2") }}
                     </div>
@@ -47,9 +47,17 @@
                     <button type="submit" class="btn-login">
                         Criar conta
                     </button>
-                    
 
                 </form>
+
+                <div class="text-center mt-4">
+                    <p class="mb-0 text-white">
+                        Já tem uma conta?
+                        <a href="{{ url_for('login.login') }}" class="nova-conta">
+                            Faça login.
+                        </a>
+                    </p>
+                </div>
 
     </div>   
 {%endblock%}

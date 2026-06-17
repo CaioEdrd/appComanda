@@ -39,7 +39,7 @@ def login():
                 url_for("home.home")
             )
         else:
-            flash("E-mail ou senha incorreto!", "Danger")
+            flash("E-mail ou senha incorreto!", "danger")
 
 
     return render_template( "pages/login.html", form=form)

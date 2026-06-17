@@ -66,6 +66,7 @@
 
         </div>
 
+        {% if current_user.perfil == "garçom" %}
         <div class="card mb-4">
             <div class="card-header header-espetinho fw-semibold text-center">
                 Abrir Comanda — {{ dataHoje.strftime("%d/%m/%Y") }} <!--Abrir uma comanda na própria página-->
@@ -145,6 +146,7 @@
                 </form>
             </div>
         </div>
+        {% endif %}
 
         <!--Lista de comandas-->
         <div class="card shadow-sm mb-4">
@@ -203,10 +205,14 @@
                                 <!--Opções de ações com a comanda-->
                                 <a href="{{ url_for('comanda.detalhe_comanda', id=comanda.id) }}"
                                    class="btn btn-info btn-sm">Detalhar</a>
+                                {% if current_user.perfil == "garçom" %}
                                 <a href="{{ url_for('comanda.editar_comanda', id=comanda.id) }}"
                                    class="btn btn-warning btn-sm">Editar</a>
+                                {% endif %}
+                                {% if current_user.perfil == "admin" %}
                                 <a href="{{ url_for('comanda.apagar_comanda', id=comanda.id) }}"
                                    class="btn btn-danger btn-sm">Excluir</a>
+                                {% endif %}
                             </td>
                         </tr>
                         {% endfor %}

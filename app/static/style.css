@@ -1,3 +1,20 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.login-page {
+    padding-top: 28px; /* ajuste conforme a altura real do alerta */
+}
+
+.login-page .alert {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
 .navbar-espetinho { 
     background-color: #7b1e1e;
 }
@@ -7,10 +24,21 @@
     color: white;
 }
 
+.navbar-user {
+    color: white;
+    font-size: 0.95rem;
+    margin-right: 20px;
+    opacity: 0.85;
+}
+
+.btn-light {
+    margin: 3px;
+}
+
 .login-container {
     background-color: #7b1e1e;
     width: 100%;
-    min-height: 600px;
+    min-height: 500px;
     border-radius: 20px;
     overflow: hidden;
 }
@@ -28,9 +56,10 @@
 
 .container-form {
   background-color: #7b1e1e;
-  margin: 50px;
-  padding: 2.5rem 2rem;
-  min-height: 600px;
+  margin: 20px 50px;
+  padding: 2.5rem 7rem;
+  min-height: 650px;
+  width: 100%;
   border-radius: 20px;
   overflow: hidden;
 }
@@ -38,18 +67,21 @@
 /* inputs e select */
 .form-control-user,
 .form-select-user {
-  background: rgba(255, 255, 255, 0.97) !important;
-  border: 1.5px solid rgba(255, 255, 255, 0.15) !important;
-  border-radius: 10px !important;
-  font-size: 14px !important;
-  color: #222 !important;
-  padding: 11px 14px !important;
-  transition: border-color 0.15s !important;
+  background: rgba(255, 255, 255, 0.97);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  font-size: 14px;
+  color: #222;
+  padding: 11px 14px;
   width: 32vw;
 }
 
+.form-labels {
+  color: white;
+}
+
 .btn-login {
-  width: 100%;
+  width: 32vw;
   padding: 13px;
   background: white;
   border: none;

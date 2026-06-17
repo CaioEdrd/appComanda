@@ -5,7 +5,7 @@ from app.models.item_comanda import ItemComanda
 from app.models.produto import Produto
 from app.forms.comanda_form import ComandaForm
 from datetime import datetime
-from flask_login import login_required
+from flask_login import current_user, login_required
 
 
 home_bp = Blueprint("home", __name__) #bp da home
@@ -25,6 +25,11 @@ def home():
                 "preco":      produto.preco_venda,
                 "quantidade": 0,
             }) #Para cada produto, adiciona uma entrada no formulário com seus dados e quantidade zero.
+    
+    if form_comanda.validate_on_submit():
+        if current_user.perfil != "garçom":
+            flash("Apenas garçons podem abrir comandas.", "danger")
+            return redirect(url_for("home.home"))
 
     if form_comanda.validate_on_submit(): #verifica se o formulário foi submetido
         itens, total = _processar_itens(form_comanda.itens.data) #Chama _processar_itens que retorna a lista de itens com quantidade maior que zero e o total calculado.    

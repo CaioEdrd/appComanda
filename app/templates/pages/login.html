@@ -2,7 +2,7 @@
 
 {% block content %}
 
-    <div class="container py-5 d-flex justify-content-center align-items-center">
+    <div class="container d-flex justify-content-center align-items-center">
 
         <div class="row login-container">
 
@@ -24,12 +24,12 @@
                     {{ form.hidden_tag() }}
 
                     <div class="mb-3">
-                        {{ form.email.label }}
+                        {{ form.email.label(class="form-labels") }}
                         {{ form.email(class="form-control-user mb-2") }}
                     </div>
 
                     <div class="mb-3">
-                        {{ form.senha.label }}
+                        {{ form.senha.label(class="form-labels") }}
                         {{ form.senha(class="form-control-user mb-2") }}
                     </div>
 
