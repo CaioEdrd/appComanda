@@ -36,6 +36,7 @@ def cadastro():
                 )
         else:
             flash("Senhas não correspondem!", "danger")
+            return redirect(url_for("cadastro.cadastro")) 
 
 
     return render_template(

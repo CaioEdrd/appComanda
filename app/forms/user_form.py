@@ -31,7 +31,7 @@ class UserForm(FlaskForm):
     )
     confirma_senha = PasswordField(
         "Confirmar Senha",
-        validators=[DataRequired(), EqualTo("senha", message="As senhas não coincidem")]
+        validators=[DataRequired()]
     )
     perfil = SelectField(
         "Perfil",
