@@ -63,6 +63,27 @@ html, body {
   overflow: hidden;
 }
 
+
+.suap_login{
+  background-color:#ff9e0c;
+  border-radius: 100em;
+  font-size: 16.8px;
+  height: 40px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  display: flex;
+  margin: 0 auto;
+  width: 80%;
+  color: #fff;
+  text-decoration: none;
+
+}
+
+.suap:hover {
+  background: #ff9900;
+}
+
 /* inputs e select */
 .form-control-user,
 .form-select-user {
