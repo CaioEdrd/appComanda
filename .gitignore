@@ -1,0 +1,28 @@
+# Ambientes virtuais
+venv/
+.venv/
+env/
+
+# Variáveis de ambiente
+.env
+.env.*
+
+# Flask
+.flaskenv
+
+# Cache do Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Arquivos de cache diversos
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Configurações do VS Code (opcional)
+.vscode/
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
